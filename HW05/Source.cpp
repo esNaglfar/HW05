@@ -93,9 +93,13 @@ bool isPrime(int n)
 
 void CountPrimes(size_t limit)
 {
+
 	for (size_t i = 0; i != limit; i++)
 	{
-		if (isPrime(i)) { pcout("Meanwhile, " + std::to_string(i) + " is prime!!!"); };
+		if (isPrime(i)) {
+			std::unique_lock<std::mutex> lock(oLock);
+			pcout("Meanwhile, " + std::to_string(i) + " is prime!!!");
+		};
 	}
 }
 
@@ -113,7 +117,7 @@ int main()
 			Thief();
 		}
 		});
-	std::thread thread3(CountPrimes, 2000000);
+	std::thread thread3(CountPrimes, 500);
 	thread1.join();
 	thread2.join();
 	thread3.join();
